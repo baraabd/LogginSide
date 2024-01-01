@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Validate HTML and CSS
+        run: |
+          # Validate HTML
+          if ! npx html-validator --file index.html; then
+            echo "HTML validation failed"
+            exit 1
+          fi
+
+          # Validate CSS
+          if ! npx stylelint "styles/*.css"; then
+            echo "CSS validation failed"
+            exit 1
+          fi
+
+      - name: Deploy to GitHub Pages
+        run: |
+          mkdir gh-pages
+          cp index.html styles/* gh-pages/
+          # Add additional files to deploy
+        # Add steps to deploy the HTML and CSS files to GitHub Pages or other hosting service
+
